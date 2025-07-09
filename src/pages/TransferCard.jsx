@@ -1,19 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiAlertCircle} from "react-icons/fi";
 import { FaCheckCircle } from "react-icons/fa";
 import { BiSend } from "react-icons/bi";
-// import { transfer } from '../service/transactionService';
-
+import { transfer } from "../service/transactionService";
+import { getDashboard } from '../service/transactionService';
 
 const TransferCard = () => {
 const [formData, setFormData] = useState({
     recipientAccountNumber: '',
     amount: '',
-    code: ''
+    description: ''
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
+  const [recentTransactions, setRecentTransactions] = useState([]);
+  useEffect(() => {
+  const fetchDashboard = async () => {
+    try {
+      const data = await getDashboard();
+      const allTransactions = data.transactions || [];
+      const recent = allTransactions.slice(0, 3);
+      setRecentTransactions(recent);
+    } catch (error) {
+      console.error("Error fetching recent transactions:", error);
+    }
+  };
+
+  fetchDashboard();
+}, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -24,18 +39,18 @@ const [formData, setFormData] = useState({
   };
 
   const validateForm = ()=>{
- if (!formData.recipientAccountNumber || formData.recipientAccountNumber.length < 10) {
-      setMessage('Please enter a valid account number (at least 10 digits)');
+ if (!formData.recipientAccountNumber || formData.recipientAccountNumber.length < 9) {
+      setMessage('Please enter a valid account number (at least 9 digits)');
       setMessageType('error');
       return false;
     }
-     if (!formData.amount || parseFloat(formData.amount) <= 0) {
+     if (!formData.amount ||formData.amount <= 0) {
       setMessage('Please enter a valid amount greater than 0');
       setMessageType('error');
       return false;
     }
-    if (!formData.code || formData.code.length < 4) {
-      setMessage('Please enter a valid transaction code (at least 4 characters)');
+    if (!formData.description) {
+      setMessage('Please enter a valid transaction description (at least 4 characters)');
       setMessageType('error');
       return false;
     }
@@ -49,9 +64,9 @@ const [formData, setFormData] = useState({
   setLoading(true);
   try {
     await transfer({
-      recipient: parseInt(formData.recipientAccountNumber),
+      recipientAccountNumber: parseInt(formData.recipientAccountNumber),
       amount: parseFloat(formData.amount),
-      description: formData.code
+      description: formData.description
     });
 
     setMessage('Transfer completed successfully!');
@@ -59,7 +74,7 @@ const [formData, setFormData] = useState({
     setFormData({
       recipientAccountNumber: '',
       amount: '',
-      code: ''
+      description: ''
     });
   } catch (error) {
     console.error('Transfer error:', error);
@@ -78,7 +93,8 @@ const [formData, setFormData] = useState({
 };
 
   return (
-    <div className="bg-white rounded-lg shadow p-6 mt-6">
+    <>
+    <div className="bg-white rounded-lg shadow p-6 mt-6 mx-6">
       <div className="flex items-center mb-4">
         <BiSend className="w-5 h-5 text-blue-600 mr-2" />
         <h2 className="text-2xl font-bold text-gray-800">Transfer Money</h2>
@@ -118,7 +134,6 @@ const [formData, setFormData] = useState({
             Amount
           </label>
           <div className="relative">
-            <span className="absolute left-3 top-2 text-gray-500">$</span>
             <input
               type="number"
               id="amount"
@@ -134,18 +149,18 @@ const [formData, setFormData] = useState({
           </div>
         </div>
  <div>
-          <label htmlFor="code" className="block text-sm font-medium text-gray-700 mb-2">
-            Transaction Code
+          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+            Transaction description
           </label>
           <input
             type="text"
-            id="code"
-            name="code"
-            value={formData.code}
+            id="description"
+            name="description"
+            value={formData.description}
             onChange={handleInputChange}
             // onKeyPress={handleKeyPress}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Enter transaction code"
+            placeholder="Enter transaction description"
           />
         </div>
         </div>
@@ -174,7 +189,45 @@ const [formData, setFormData] = useState({
           )}
         </button>
       </div>
+       </div>
+       <div className="bg-white rounded-lg shadow-2xl p-6 mt-6 mx-6">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Recent Transactions</h2>
+        {recentTransactions.length === 0 ? (
+          <p className="text-gray-500">No recent transactions.</p>
+        ) : (
+          <div className="space-y-3">
+            {recentTransactions.map((tx) => (
+              <div
+                key={tx.txId}
+                className="flex justify-between items-center p-3 bg-gray-50 rounded"
+              >
+                <div>
+                  <p className="font-semibold">{tx.description}</p>
+                  <p className="text-sm text-gray-500">
+                    {new Date(tx.createdAt).toLocaleDateString('en-NG', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                    })}
+                  </p>
+                </div>
+                <span
+                  className={`font-bold ${
+                    tx.type === 'DEPOSIT' ? 'text-green-600' : 'text-red-600'
+                  }`}
+                >
+                  {tx.type === 'DEPOSIT' ? '+' : '-'}₦
+                  {tx.amount.toLocaleString('en-NG', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
+      </>
   )
 }
 

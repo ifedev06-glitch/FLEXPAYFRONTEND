@@ -6,36 +6,42 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { loginUser } from "../service/authService";
 import { useNavigate } from "react-router-dom";
 
-
 const Login = () => {
-  const [user, setUser] = useState({ username: "", password: "" })
-  const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [user, setUser] = useState({ username: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setUser((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setUser((prev) => ({ ...prev, [name]: value }));
+  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsLoading(true)
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setIsLoading(true);
 
-    try {
-      const response = await loginUser(user) // user = { username, password }
+  try {
+    const response = await loginUser(user);
+    console.log("Login response:", response);
 
-     localStorage.setItem("authToken", response.data.token)
+    const token = response?.data?.token; 
 
-      navigate("/dashboard")
-      alert("Login successful!")
-    } catch (error) {
-      const message =
-        error.response?.data?.message || "Login failed. Please check your credentials."
-      alert(message)
-    } finally {
-      setIsLoading(false)
+    if (token) {
+      localStorage.setItem("authToken", token);
+      alert("Login successful!");
+      navigate("/profile");
+    } else {
+      alert("Login failed: Token not found.");
     }
+  } catch (error) {
+    const message =
+      error.response?.data?.message || "Login failed. Please check your credentials.";
+    alert(message);
+  } finally {
+    setIsLoading(false);
   }
+};
 
   return (
     <main className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-200 p-4">
@@ -109,14 +115,14 @@ const Login = () => {
 
           <p className="text-center text-sm text-gray-600">
             Don’t have an account?{" "}
-            <a href="#" className="text-blue-600 hover:underline font-medium">
+            <a href="/register" className="text-blue-600 hover:underline font-medium">
               Sign up here
             </a>
           </p>
         </form>
       </section>
     </main>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
