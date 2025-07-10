@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { SiWebmoney } from "react-icons/si";
 import { useNavigate } from "react-router-dom";
