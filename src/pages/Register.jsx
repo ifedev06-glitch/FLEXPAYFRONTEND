@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { SiWebmoney } from "react-icons/si";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from '../service/authService';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +18,7 @@ const Register = () => {
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -173,18 +175,25 @@ const Register = () => {
             />
           </div>
 
-          <div>
+          <div className='relative'>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
             <input
               id="password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               name="password"
               value={formData.password}
               onChange={handleInputChange}
               required
-              className="mt-1 w-full p-3 border border-blue-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              className=" w-full p-3 border border-blue-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
               placeholder="Enter your password"
             />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 mt-2"
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
           </div>
 
           {/* Responsive Phone & Gender in grid */}
@@ -205,7 +214,7 @@ const Register = () => {
                   onChange={handleInputChange}
                   required
                   className="flex-1 min-w-0 block w-full rounded-r-md border border-blue-300 p-3 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                  placeholder="Enter your phone number"
+                  placeholder="Enter your phone no :"
                 />
               </div>
             </div>
