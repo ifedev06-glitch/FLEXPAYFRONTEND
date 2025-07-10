@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-// const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
-const BASE_URL = "http://localhost:8085/api/v1";
+const BASE_URL = "https://flexpay-bank.onrender.com/api/v1";
+console.log("API BASE_URL:", BASE_URL);
 
 export const registerUser = async (userData) => {
   try {
