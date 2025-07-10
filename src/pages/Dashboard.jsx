@@ -48,7 +48,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
-      <header className="bg-white shadow px-6 py-4 border-b border-gray-350 flex justify-between items-center">
+      <header className="bg-white shadow px-6 py-4 border-b border-gray-350 flex justify-between items-center z-50 relative">
         <div className="flex items-center space-x-3">
           {/* Hamburger menu - mobile only */}
           <button
