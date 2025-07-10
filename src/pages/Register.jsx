@@ -101,7 +101,7 @@ const Register = () => {
 
   return (
     <main className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-200 px-4 sm:px-6 lg:px-8">
-      <section className="bg-white w-full max-w-md sm:max-w-lg p-6 sm:p-8 rounded-2xl shadow-xl">
+      <section className="bg-white w-full max-w-md sm:max-w-lg p-6 sm:p-8 rounded-2xl shadow-2xl mt-6">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold flex items-center justify-center gap-2">
             <SiWebmoney className="text-blue-600 text-5xl" />
