@@ -23,6 +23,11 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    navigate('/login');
+  };
+
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
@@ -62,7 +67,9 @@ const Dashboard = () => {
         </div>
         <div className="flex items-center space-x-4">
           <IoPersonCircleOutline className="text-blue-600 text-3xl" />
+           <button onClick={handleLogout} aria-label="Logout">
           <LuLogOut className="text-blue-600 text-3xl" />
+          </button>
         </div>
       </header>
 
@@ -77,7 +84,7 @@ const Dashboard = () => {
       <div className="flex">
         {/* Sidebar */}
         <div
-          className={`fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-sm transform ${
+          className={`pt-16 fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-sm transform ${
             sidebarOpen ? 'translate-x-0' : '-translate-x-full'
           } transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:flex`}
         >

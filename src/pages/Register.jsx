@@ -188,19 +188,26 @@ const Register = () => {
           </div>
 
           {/* Responsive Phone & Gender in grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="tel" className="block text-sm font-medium text-gray-700">Phone</label>
-              <input
-                id="tel"
-                type="text"
-                name="tel"
-                value={formData.tel}
-                onChange={handleInputChange}
-                required
-                className="mt-1 w-full p-3 border border-blue-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                placeholder="Enter your phone number"
-              />
+              <label htmlFor="tel" className="block text-sm font-medium text-gray-700">
+                Phone
+              </label>
+              <div className="mt-1 flex rounded-md shadow-sm">
+                <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-blue-300 bg-gray-100 text-gray-700 select-none">
+                  +234
+                </span>
+                <input
+                  id="tel"
+                  type="text"
+                  name="tel"
+                  value={formData.tel}
+                  onChange={handleInputChange}
+                  required
+                  className="flex-1 min-w-0 block w-full rounded-r-md border border-blue-300 p-3 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  placeholder="Enter your phone number"
+                />
+              </div>
             </div>
 
             <div>
