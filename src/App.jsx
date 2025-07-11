@@ -6,9 +6,7 @@ import TransferCard from "./pages/TransferCard";
 import DepositCard from "./pages/DepositCard";
 import Withdraw from "./pages/Withdraw";
 import Register from "./pages/Register";
-// import Register from "./pages/Register";
-// import RegistrationSuccessful from "./pages/RegistrationSuccessful";
-// import RedirectPage from "./pages/Redirect"; // Rename this if your file name is different
+
 
 function App() {
   return (

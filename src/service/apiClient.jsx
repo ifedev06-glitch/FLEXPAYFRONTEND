@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const BASE_URL = 'https://flexpay-bank.onrender.com/api/v1';
 const apiClient = axios.create({
-  // baseURL: import.meta.env.VITE_API_BASE_URL,
   baseURL: BASE_URL,
   headers: {
     'Content-Type': 'application/json',
